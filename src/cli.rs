@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
-use eyre::{Result};
+use eyre::Result;
 
-use crate::subscriber;
 use crate::publisher;
+use crate::subscriber;
 
 #[derive(Parser)]
 #[clap(
@@ -41,10 +41,11 @@ impl Cli {
         match &cli.command {
             Commands::Subscribe { topic } => {
                 subscriber::subscribe(project_id, endpoint, topic.to_string()).await?;
-            },
+            }
             Commands::Publish { topic, message } => {
-                publisher::publish(project_id, endpoint, topic.to_string(), message.to_string()).await?;
-            },
+                publisher::publish(project_id, endpoint, topic.to_string(), message.to_string())
+                    .await?;
+            }
         }
 
         Ok(())
