@@ -1,6 +1,9 @@
 use clap::{Parser, Subcommand};
 use eyre::{Result};
 
+use crate::subscriber;
+use crate::publisher;
+
 #[derive(Parser)]
 #[clap(
     author,
@@ -32,15 +35,15 @@ enum Commands {
 }
 
 impl Cli {
-    pub fn run(project_id: String, endpoint: String) -> Result<()> {
+    pub async fn run(project_id: String, endpoint: String) -> Result<()> {
         let cli = Cli::parse();
 
         match &cli.command {
             Commands::Subscribe { topic } => {
-                println!("Subscribing to topic: {}", topic);
+                subscriber::subscribe(project_id, endpoint, topic.to_string()).await?;
             },
             Commands::Publish { topic, message } => {
-                println!("Publishing message {} to topic: {}", message, topic);
+                publisher::publish(project_id, endpoint, topic.to_string(), message.to_string()).await?;
             },
         }
 

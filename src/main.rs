@@ -2,8 +2,12 @@ use dotenv::dotenv;
 use std::env;
 
 mod cli;
+mod client;
+mod subscriber;
+mod publisher;
 
 use cli::Cli;
+
 
 #[tokio::main]
 async fn main() {
@@ -15,7 +19,5 @@ async fn main() {
     let endpoint = env::var("PUBSUB_EMULATOR_HOST").expect("PUBSUB_EMULATOR_HOST must be set");
    
     // Execute cli command
-    if let Err(err) = Cli::run(project_id, endpoint) {
-        println!("Command exection error: {}", err);
-    }
+    Cli::run(project_id, endpoint).await.unwrap();
 }
